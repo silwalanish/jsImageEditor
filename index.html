@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Image Editor</title>
+	<link rel="stylesheet" type="text/css" href="css/theme.css">
+</head>
+<body>
+
+	<div class="editor">
+		<canvas class="editor__canvas"></canvas>
+	</div>
+
+	<script type="text/javascript" src="js/imageEditor.js"></script>
+	<script type="text/javascript">
+		
+		var editor = new Application();
+
+		editor.registerFilter(new Filter("Original", function(ctx){
+			
+		}));
+
+		editor.registerFilter(new Filter("Fade", function(ctx){
+			var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+			var col = 0;
+			for (var i = 0; i < imageData.data.length; i+=4) {
+				col++;
+				if(col < (ctx.canvas.width/2)){
+					imageData.data[i] += 80*(1 - (2*col/ctx.canvas.width));
+				}else{
+					imageData.data[i+2] += 80*((2*col/ctx.canvas.width)-1);
+				}
+				col %= ctx.canvas.width;
+			}
+			ctx.putImageData(imageData, 0, 0);
+		}));
+
+		editor.registerFilter(new Filter("Cool", function(ctx){
+			var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+			for (var i = 0; i < imageData.data.length; i+=4) {
+				imageData.data[i+2] += 44;
+			}
+			ctx.putImageData(imageData, 0, 0);
+		}));
+
+		editor.registerFilter(new Filter("Warm", function(ctx){
+			var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+			for (var i = 0; i < imageData.data.length; i+=4) {
+				imageData.data[i] += 20;
+			}
+			ctx.putImageData(imageData, 0, 0);
+		}));
+
+		editor.registerFilter(new Filter("Vintage", function(ctx){
+			var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+			for (var i = 0; i < imageData.data.length; i+=4) {
+				imageData.data[i] += 30;
+				imageData.data[i+1] += 45;
+				imageData.data[i+2] += 15;
+			}
+			ctx.putImageData(imageData, 0, 0);
+		}));
+
+		editor.registerFilter(new Filter("Invert", function(ctx){
+			var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+			for (var i = 0; i < imageData.data.length; i+=4) {
+				imageData.data[i] = 255-imageData.data[i];
+				imageData.data[i+1] = 255-imageData.data[i+1];
+				imageData.data[i+2] = 255-imageData.data[i+2];
+			}
+			ctx.putImageData(imageData, 0, 0);
+		}));
+
+		editor.registerFilter(new Filter("Sepia", function(ctx){
+			ctx.fillStyle = "rgba(112, 66, 20, 0.4)";
+			ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+		}));
+
+		editor.registerFilter(new Filter("B/W", function(ctx){
+			var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+			for (var i = 0; i < imageData.data.length; i+=4) {
+				let c = imageData.data[i] * 0.21 + imageData.data[i+1] * 0.72 + imageData.data[i+2] * 0.07;
+				imageData.data[i] = c;
+				imageData.data[i+1] = c;
+				imageData.data[i+2] = c;
+			}
+			ctx.putImageData(imageData, 0, 0);
+		}));
+
+	</script>
+
+</body>
+</html>
