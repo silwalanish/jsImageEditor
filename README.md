@@ -1,6 +1,9 @@
 # jsImageEditor
 Javascript Image Editor is a simple image editor written in javascript(ES 6)
 
+# Demo
+https://silwalanish.github.io/jsImageEditor/
+
 # Features
 1. Apply various filters
 2. Crop and rotate // In development
